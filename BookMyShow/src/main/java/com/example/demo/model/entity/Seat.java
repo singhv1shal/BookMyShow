@@ -17,12 +17,18 @@ public class Seat {
     private Long seatId;
     private SeatStatus seatStatus;
     private Double price;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
-    @JoinColumn(name = "show_id")
+    @ManyToOne
+    @JoinColumn(name = "show_id", nullable = true )
     private Show show;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customer_id")
+
+    @OneToOne(mappedBy = "seat")
+    private Ticket ticket;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = true)
     private Customer customer;
-    Seat(){this.seatStatus = SeatStatus.AVAILABLE;}
+    public Seat(){this.seatStatus = SeatStatus.AVAILABLE;
+    this.price = 100.0;
+    }
 
 }

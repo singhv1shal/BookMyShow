@@ -1,10 +1,16 @@
 package com.example.demo.services;
 
+import com.example.demo.model.entity.Customer;
 import com.example.demo.model.entity.Seat;
 import com.example.demo.model.entity.Show;
+import com.example.demo.model.entity.Ticket;
 import com.example.demo.model.internal.SeatStatus;
+import com.example.demo.model.response.SeatResponse;
+import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.SeatRepository;
 import com.example.demo.repository.ShowRepository;
+import com.example.demo.repository.TicketRepository;
+import com.example.demo.services.mapper.SeatEntityToResponseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +24,31 @@ public class BookingService {
     ShowRepository showRepository;
     @Autowired
     SeatRepository seatRepository;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    SeatEntityToResponseMapper seatEntityToResponseMapper;
+    @Autowired
+    TicketRepository ticketRepository;
 
 
-    public List<Seat> displaySeats(Long showId) {
+    public List<SeatResponse> displaySeats(Long showId) {
         Optional<Show> show = showRepository.findById(showId);
-        if (show.isPresent()) {
-            return show.get().getSeats();
+        List<SeatResponse> seatResponses = new ArrayList<SeatResponse>();
+         if (show.isPresent()) {
+             List<Seat> showSeats = show.get().getSeats();
+            for(Seat seat: showSeats){
+                seatResponses.add(seatEntityToResponseMapper.apply(seat));
+            }
         }
-        return null;
+        return seatResponses;
     }
 
-    public List<Seat> bookSeats(Long showId, List<Long> seats) {
+    public List<SeatResponse> bookSeats(Long showId, List<Long> seats, Long customerId) {
         Optional<Show> show = showRepository.findById(showId);
-        List<Seat> seatList = new ArrayList<Seat>();
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        List<SeatResponse> seatList = new ArrayList<SeatResponse>();
+
         if (show.isPresent()) {
             for (Long seatId : seats) {
                 Optional<Seat> seat = seatRepository.findById(seatId);
@@ -40,8 +58,13 @@ public class BookingService {
             }
             for (Long seatId : seats) {
                 Optional<Seat> seat = seatRepository.findById(seatId);
+                Ticket ticket = new Ticket();
+                ticket.setCustomer(customer.get());
+                ticket.setSeat(seat.get());
+                ticketRepository.save(ticket);
                 seat.get().setSeatStatus(SeatStatus.BOOKED);
-                seatList.add(seat.get());
+                seat.get().setCustomer(customer.get());
+                seatList.add(seatEntityToResponseMapper.apply(seat.get()));
                 seatRepository.save(seat.get());
             }
         }

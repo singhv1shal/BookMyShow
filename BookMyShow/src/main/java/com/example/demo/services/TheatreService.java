@@ -28,14 +28,17 @@ public class TheatreService {
     public Theatre addTheatre(Theatre theatre, Long ownerId, String cityName){
         Optional<TheatreOwner> owner = theatreOwnerRepository.findById(ownerId);
         Optional<City> city = cityRepository.findByCityName(cityName);
+        City city1 = new City();
         if(!city.isPresent()) {
-          City city1 = new City();
-          city1.setCityName(cityName);;
+          city1.setCityName(cityName);
           cityRepository.save(city1);
         }
         if(owner.isPresent()){
             theatre.setTheatreOwner(owner.get());
+            if(city.isPresent())
             theatre.setCity(city.get());
+            else
+            theatre.setCity(city1);
             theatreRepository.save(theatre);
             return theatre;
         }

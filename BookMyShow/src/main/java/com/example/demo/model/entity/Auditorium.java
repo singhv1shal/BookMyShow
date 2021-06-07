@@ -16,7 +16,7 @@ public class Auditorium {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "theatre_id")
     private Theatre theatre;
     @OneToMany(cascade = CascadeType.ALL)

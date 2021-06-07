@@ -3,8 +3,12 @@ package com.example.demo.services;
 import com.example.demo.model.entity.City;
 import com.example.demo.model.entity.Movie;
 import com.example.demo.model.entity.Theatre;
+import com.example.demo.model.response.CityResponse;
+import com.example.demo.model.response.MovieResponse;
 import com.example.demo.repository.CityRepository;
 import com.example.demo.repository.TheatreOwnerRepository;
+import com.example.demo.services.mapper.CityEntityToResponseMapper;
+import com.example.demo.services.mapper.MovieEntityToResponseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,34 +21,37 @@ import java.util.Optional;
 public class SearchService {
 
     @Autowired
-    TheatreOwnerRepository theatreOwnerRepository;
-    @Autowired
     CityRepository cityRepository;
+    @Autowired
+    CityEntityToResponseMapper cityEntityToResponseMapper;
+    @Autowired
+    MovieEntityToResponseMapper movieEntityToResponseMapper;
 
-    public List<City> findAllCities(){
+    public List<CityResponse> findAllCities(){
         List<City>cities = cityRepository.findAll();
-        List<City> result = new ArrayList<City>();
+        List result = new ArrayList<CityResponse>();
         for(City city: cities){
             if(city.getTheatres().size()!=0){
-                result.add(city);
+                result.add(cityEntityToResponseMapper.apply(city));
             }
         }
         return result;
     }
 
-    public HashSet<Movie> findAllMovies(Long cityId){
+    public HashSet<MovieResponse> findAllCityMovies(Long cityId){
         Optional<City> city = cityRepository.findById(cityId);
-        HashSet<Movie> result = new HashSet<Movie>();
-        if(city.isPresent()){
-            List<Theatre>theatres = city.get().getTheatres();
-            for(Theatre theatre: theatres){
-                for(Movie movie: theatre.getMovies()){
-                    result.add(movie);
+        HashSet result = new HashSet<MovieResponse>();
+        if(city.isPresent()) {
+            List<Theatre> theatres = city.get().getTheatres();
+            for (Theatre theatre : theatres) {
+                List<Movie>movies = theatre.getMovies();
+                for (Movie movie : movies) {
+                    result.add(movieEntityToResponseMapper.apply(movie));
                 }
             }
-            return result;
         }
-        return null;
+            return result;
+
     }
 
 

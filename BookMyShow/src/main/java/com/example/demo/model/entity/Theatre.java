@@ -23,10 +23,10 @@ public class Theatre {
     @ManyToMany(mappedBy = "theatres" )
     @JsonIgnore
     private List<Movie>movies;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "theatreOwner_id")
     private TheatreOwner theatreOwner;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 

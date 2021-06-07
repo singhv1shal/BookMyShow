@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,10 @@ public class Customer extends User{
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Seat> bookedSeats;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Ticket>tickets;
+
 
 
 }

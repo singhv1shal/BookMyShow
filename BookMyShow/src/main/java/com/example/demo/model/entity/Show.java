@@ -19,10 +19,10 @@ public class Show {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long showId;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
-    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "auditorium_id")
     private Auditorium auditorium;
     @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
@@ -30,9 +30,6 @@ public class Show {
     private List<Seat> seats;
     private Instant startTime;
     private Instant endTime;
-     public Show(int size){
-        this.seats = new ArrayList<Seat>(size);
 
-    }
 
 }

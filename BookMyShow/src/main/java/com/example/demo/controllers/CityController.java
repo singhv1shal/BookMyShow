@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 import com.example.demo.model.entity.City;
 import com.example.demo.model.entity.Movie;
+import com.example.demo.model.response.CityResponse;
+import com.example.demo.model.response.MovieResponse;
 import com.example.demo.repository.CityRepository;
 import com.example.demo.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,9 @@ public class CityController {
 
 
     @GetMapping("/city/display")
-    public List<City> dislplayAllCitites(){return searchService.findAllCities();}
+    public List<CityResponse> displayAllCities(){return searchService.findAllCities();}
 
     @GetMapping("/movie/display/city/{cityId}")
-    public HashSet<Movie> dislplayAllCitites(@PathVariable ("cityId") Long cityId){return searchService.findAllMovies(cityId);}
+    public HashSet<MovieResponse> displayAllMovies(@PathVariable ("cityId") Long cityId){return searchService.findAllCityMovies(cityId);}
 
 }

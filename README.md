@@ -26,7 +26,7 @@ The class diagram includes:
     ```
   - Add and Display movie in a city
     ```java
-    POST /theatre/{theatreId}/movie/create"
+    POST /theatre/{theatreId}/movie/create
     GET /city/{cityId}/movie/display
     ```
   - Add and display movie show 

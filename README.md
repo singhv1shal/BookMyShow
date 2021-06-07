@@ -2,7 +2,7 @@
 
 This project contains the low level design implementation for an online ticketing system that sells movie tickets like BookMyShow.
     
-A demo for the APIs interaction [BookMyShow Demo](http://bit.ly/bookmyshow-demo)
+A demo video for the APIs interaction [BookMyShow Demo](http://bit.ly/bookmyshow-demo)
 
 ## Model class relationships
 
